@@ -1,24 +1,47 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## How to run it on your local
 
-Things you may want to cover:
+1/ Install `mkcert` (https://github.com/FiloSottile/mkcert)
 
-* Ruby version
+2/ Install dependencies and run
+```
+mkcert -i # this will install two certificates files at the project root folder as trusted on your localhost
 
-* System dependencies
+bundle install
 
-* Configuration
+rails s -b 'ssl://0.0.0.0:3000?cert=localhost.pem&key=localhost-key.pem&verify_mode=none'
 
-* Database creation
+```
 
-* Database initialization
+3/ Visit: `https://localhost:3000`
 
-* How to run the test suite
+## Libraries used:
 
-* Services (job queues, cache servers, search engines, etc.)
++ Bootstrap
 
-* Deployment instructions
++ Devise
 
-* ...
++ Xero Ruby
+
++ Kaminari (for pagination)
+
++ RSpec
+
++ Factory Bot
+
+## Notes
+
++ UI is very simple, just to demonstrate the main workflow
+
++ There is only 1 test for the main method in User model which fetch invoices. We can totally add more if needed
+
++ There is a ActiveJob for fetching invoices and it is called in the callback. We could also use it at other places if needed
+
+## Rooms for improvement
+
++ Make the UX a bit better (like show loading icon while fetching data, or show data in real-time while sync)
+
++ More error handling
+
++ Better UI
