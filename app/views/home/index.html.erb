@@ -1,8 +1,9 @@
 <h1>Invoices</h1>
 
 <turbo-frame id="invoice-list">
+  <%= render "layouts/flash" %>
   <% if current_user.connected_with_xero? %>
-    <div class="row">
+    <div class="row mb-4">
       <div class="col-4">
         <%= form_tag "/", method: :get do %>
           <div class="form-group mb-2">
@@ -27,6 +28,7 @@
     </div>
     
     <% if @invoices.present? %>
+      <%= paginate @invoices, theme: 'bootstrap-5' %>
       <table class="table mt-3">
         <thead>
           <tr>
@@ -51,8 +53,9 @@
           <% end %>
         </tbody>
       </table>
+      <%= paginate @invoices, theme: 'bootstrap-5' %>
     <% elsif !@invoices.nil? %>
-      <h4 class="mt-4">No data</h4>
+      <h4 class="mt-4">No data. Refresh the page or sync again to see latest data.</h4>
     <% end %>
   <% else %>
     <%= link_to "Connect with Xero", xero_authorization_url, class: "btn btn-primary" %>

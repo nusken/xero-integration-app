@@ -2,9 +2,13 @@ class HomeController < ApplicationController
   def index
     @invoices = Invoice.all
     
+    @page = params[:page] || 1
+    
     if params[:tenant_id]
       @invoices = @invoices.where(tenant_id: params[:tenant_id])
     end
+    
+    @invoices = @invoices.page(params[:page])
   end
   
   def sync_invoices

@@ -13,9 +13,6 @@
   <body>
     <%= render "layouts/navbar" %>
     <div class="container py-3">
-      <% if flash.notice %>
-        <div class="alert alert-warning"><%= flash[:notice] %></div>
-      <% end %>
       <%= yield %>
     </div>
   </body>

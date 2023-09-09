@@ -78,6 +78,8 @@ gem 'bootstrap', '~> 5.1.3'
 gem 'devise', '~> 4.9.2'
 
 # Xero SDK
-gem 'xero-ruby'
+gem 'xero-ruby', '~> 4.3.1'
 
-gem 'byebug'
+# Pagination
+gem 'kaminari', '~> 1.2.2'
+gem 'bootstrap5-kaminari-views', '~> 0.0.1'

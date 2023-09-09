@@ -35,9 +35,11 @@ class XeroService
       state: '1'
     }
     config = { timeout: 30 }
+    
     @xero_client ||= XeroRuby::ApiClient.new(credentials: creds, config: config)
 
     if token_set
+      puts "Set new token set"
       @xero_client.set_token_set(token_set)
     end
 
@@ -47,6 +49,8 @@ class XeroService
   def refresh_token 
     new_token_set = xero_client.refresh_token_set(token_set)
     new_token_set["connections"] = xero_client.connections
+    
+    @token_set = new_token_set
     
     new_token_set
   end

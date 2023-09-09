@@ -3,15 +3,15 @@ class XeroOauthController < ApplicationController
   
   def callback 
     if params['code']
-      @token_set = @xero_client.get_token_set_from_callback(params)
+      @token_set = xero_client.get_token_set_from_callback(params)
       current_user.xero_token_set = @token_set if !@token_set["error"]
-      current_user.xero_token_set['connections'] = @xero_client.connections
+      current_user.xero_token_set['connections'] = xero_client.connections
       current_user.active_tenant_id = latest_connection(current_user.xero_token_set['connections'])
       current_user.save!
       
-      current_user.fetch_invoices_from_xero
+      SyncInvoices.perform_later current_user.id 
       
-      flash.notice = "Successfully received Xero Token Set"
+      flash.notice = "Successfully received Xero Token Set. Data are being synced"
     else
       flash.notice = "Failed to received Xero Token Set"
     end
