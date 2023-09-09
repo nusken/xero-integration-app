@@ -9,8 +9,8 @@ gem "rails", "~> 7.0.5"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
+# Postgres Database
+gem 'pg', '~> 1.5.4'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
@@ -70,3 +70,20 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+# Bootstrap
+gem 'bootstrap', '~> 5.1.3'
+
+# Authentication
+gem 'devise', '~> 4.9.2'
+
+# Oauth2 with Xero
+gem 'omniauth-xero-oauth2', '~> 1.1.0'
+
+# Fix issue with Authentication token in OmniAuth
+gem 'omniauth-rails_csrf_protection'
+
+# Xero SDK
+gem 'xero-ruby'
+
+gem 'byebug'

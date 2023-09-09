@@ -1,0 +1,59 @@
+<h1>Invoices</h1>
+
+<turbo-frame id="invoice-list">
+  <% if current_user.connected_with_xero? %>
+    <div class="row">
+      <div class="col-4">
+        <%= form_tag fetch_invoices_path do %>
+          <div class="form-group mb-2">
+            <label for="tenant_id">Active Tenant</label>
+            <%= select_tag "tenant_id", options_for_select(current_user.xero_token_set["connections"].pluck("tenantName", "tenantId"), selected: @tenant_id), class: "form-select" %>
+          </div>
+          <div class="form-group">
+            <%= submit_tag "Fetch invoices", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-4 text-end offset-4 text-end">
+        <%= form_tag disconnect_path do %>
+          <%= submit_tag "Disconnect from Xero", class: "btn btn-danger" %>
+        <% end %>
+      </div>
+    </div>
+    
+    <% if @invoices.present? %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Client</th>
+            <th>Outstanding amount</th>
+            <th>Total amount</th>
+            <th>Due date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @invoices.each do |invoice| %>
+            <tr>
+              <td><%= invoice.invoice_id %></td>
+              <td><%= invoice.contact.name %></td>
+              <td><%= number_to_currency(invoice.amount_due) %></td>
+              <td><%= number_to_currency(invoice.total) %></td>
+              <td><%= invoice.due_date %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% if @page.to_i > 1 %>
+        <%= link_to "Prev", fetch_invoices_path(page: @page - 1), data: { turbo_method: :post } %>
+      <% end %> 
+      <% if @page.to_i <= 1 %>
+        <%= link_to "Next", fetch_invoices_path(page: @page + 1), data: { turbo_method: :post } %>
+      <% end %>
+    <% elsif !@invoices.nil? %>
+      <h4 class="mt-4">No data</h4>
+    <% end %>
+  <% else %>
+    <%= link_to "Connect with Xero", xero_authorization_url, class: "btn btn-primary" %>
+  <% end %>
+</turbo-frame>
