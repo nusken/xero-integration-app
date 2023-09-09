@@ -17,9 +17,6 @@ class User < ApplicationRecord
     
     xero_service = XeroService.new(xero_token_set)
     
-    self.xero_token_set = xero_service.refresh_token
-    self.save
-    
     # Fetch invoices from each tenant
     xero_token_set["connections"].each do |connection|
       xero_service.fetch_invoices(connection["tenantId"]) do |fetched_invoices|
@@ -36,5 +33,12 @@ class User < ApplicationRecord
         end
       end
     end
+  end
+  
+  def refresh_xero_token
+    xero_service = XeroService.new(xero_token_set)
+    self.xero_token_set = xero_service.refresh_token 
+    
+    self.save
   end
 end

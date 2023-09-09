@@ -11,7 +11,7 @@ class XeroOauthController < ApplicationController
       
       SyncInvoices.perform_later current_user.id 
       
-      flash.notice = "Successfully received Xero Token Set. Data are being synced"
+      flash.notice = "Successfully received Xero Token Set"
     else
       flash.notice = "Failed to received Xero Token Set"
     end

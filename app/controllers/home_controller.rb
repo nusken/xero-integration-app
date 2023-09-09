@@ -1,10 +1,10 @@
 class HomeController < ApplicationController
   def index
-    @invoices = Invoice.all
+    @invoices = current_user.invoices
     
     @page = params[:page] || 1
     
-    if params[:tenant_id]
+    if params[:tenant_id].present?
       @invoices = @invoices.where(tenant_id: params[:tenant_id])
     end
     
@@ -12,6 +12,8 @@ class HomeController < ApplicationController
   end
   
   def sync_invoices
+    current_user.refresh_xero_token 
+    
     current_user.fetch_invoices_from_xero
     
     flash.notice = "Successfully synced all invoices"
