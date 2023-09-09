@@ -1,6 +1,8 @@
 class XeroService 
   attr_reader :token_set, :xero_client
   
+  class XeroServiceError < StandardError; end
+    
   def initialize(token_set = {})
     @token_set = token_set
     
@@ -8,32 +10,19 @@ class XeroService
   end
   
   def fetch_invoices(tenant_id, &block)
-    if token_set.present?
-      xero_client.set_token_set(token_set)
-      
-      if xero_client.token_expired?
-        new_token_set = refresh_token
-        xero_client.set_token_set(new_token_set)
-      end
-    else 
-      raise "Missing Xero Token Set"
-    end
+    validate_token_set_presence
     
     page = 1
     
     loop do 
-      opts = {
-        page: page
-      }
+      opts = { page: page }
       
-      invoices = xero_client.accounting_api.get_invoices(tenant_id, opts).invoices
+      invoices = fetch_invoices_for_tenant(tenant_id, opts)
       
-      if invoices.present?
-        yield(invoices)
-        page += 1
-      else
-        break
-      end
+      break if invoices.empty?
+      
+      yield(invoices)
+      page += 1
     end
   end
   
@@ -58,5 +47,23 @@ class XeroService
     config = { timeout: 30 }
     
     @xero_client ||= XeroRuby::ApiClient.new(credentials: creds, config: config)
+  end
+  
+  def validate_token_set_presence
+    raise XeroServiceError, "Missing Xero Token Set" unless token_set.present?
+    
+    xero_client.set_token_set(token_set)
+      
+    if xero_client.token_expired?
+      new_token_set = refresh_token
+      xero_client.set_token_set(new_token_set)
+    end
+  end
+  
+  def fetch_invoices_for_tenant(tenant_id, opts)
+    xero_client.accounting_api.get_invoices(tenant_id, opts).invoices
+  rescue StandardError => e
+    # Handle API errors here
+    raise XeroServiceError, "Error fetching invoices: #{e.message}"
   end
 end
