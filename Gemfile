@@ -77,12 +77,6 @@ gem 'bootstrap', '~> 5.1.3'
 # Authentication
 gem 'devise', '~> 4.9.2'
 
-# Oauth2 with Xero
-gem 'omniauth-xero-oauth2', '~> 1.1.0'
-
-# Fix issue with Authentication token in OmniAuth
-gem 'omniauth-rails_csrf_protection'
-
 # Xero SDK
 gem 'xero-ruby'
 

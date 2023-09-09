@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   
   get 'auth/xero_oauth/callback', to: 'xero_oauth#callback'
   
-  post :fetch_invoices, to: "home#fetch_invoices", as: :fetch_invoices
+  post :sync_invoices, to: "home#sync_invoices", as: :sync_invoices
   post :disconnect, to: "home#disconnect", as: :disconnect
 end

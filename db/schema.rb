@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_08_072107) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_09_083425) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "invoices", force: :cascade do |t|
+    t.string "xero_invoice_id"
+    t.string "status"
+    t.decimal "outstanding_amount"
+    t.decimal "total_amount"
+    t.date "due_date"
+    t.string "client_name"
+    t.string "contact_id"
+    t.string "tenant_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false

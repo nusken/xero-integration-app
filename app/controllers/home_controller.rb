@@ -1,21 +1,18 @@
 class HomeController < ApplicationController
   def index
+    @invoices = Invoice.all
+    
+    if params[:tenant_id]
+      @invoices = @invoices.where(tenant_id: params[:tenant_id])
+    end
   end
   
-  def fetch_invoices
-    refresh_token 
+  def sync_invoices
+    current_user.fetch_invoices_from_xero
     
-    @page = params[:page] || 1
+    flash.notice = "Successfully synced all invoices"
     
-    opts = {
-      page: 1
-    }
-    
-    @tenant_id = params[:tenant_id] || current_user.active_tenant_id
-    
-    @invoices = xero_client.accounting_api.get_invoices(@tenant_id, opts).invoices
-    
-    render :index
+    redirect_to root_path
   end
   
   def disconnect
