@@ -4,17 +4,28 @@
 
 1/ Install `mkcert` (https://github.com/FiloSottile/mkcert)
 
-2/ Install dependencies and run
+2/ Install dependencies
+
+```
+bundle install
+```
+
+3/ Update `database.yml` and run
+
+```
+rails db:create
+rails db:migrate
+```
+
+4/ Run
 ```
 mkcert -i # this will install two certificates files at the project root folder as trusted on your localhost
-
-bundle install
 
 rails s -b 'ssl://0.0.0.0:3000?cert=localhost.pem&key=localhost-key.pem&verify_mode=none'
 
 ```
 
-3/ Visit: `https://localhost:3000`
+5/ Visit: `https://localhost:3000`
 
 ## Libraries used:
 
